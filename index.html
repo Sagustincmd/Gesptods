@@ -10,176 +10,145 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <style>
   :root {
-    --bg: #0f1117; --bg2: #161b27; --bg3: #1e2535; --bg4: #252d3d;
-    --border: rgba(255,255,255,0.07); --border2: rgba(255,255,255,0.13);
-    --text: #e8eaf0; --text2: #8b92a8; --text3: #555f7a;
-    --accent: #3b82f6; --accent2: #1d4ed8;
-    --green: #22c55e; --green-bg: rgba(34,197,94,0.1);
-    --red: #ef4444; --red-bg: rgba(239,68,68,0.1);
-    --amber: #f59e0b; --amber-bg: rgba(245,158,11,0.1);
-    --font: 'DM Sans', sans-serif; --mono: 'DM Mono', monospace;
-    --radius: 10px; --radius-lg: 16px;
+    --bg:#0f1117;--bg2:#161b27;--bg3:#1e2535;--bg4:#252d3d;
+    --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+    --text:#e8eaf0;--text2:#8b92a8;--text3:#555f7a;
+    --accent:#3b82f6;--accent2:#1d4ed8;
+    --green:#22c55e;--green-bg:rgba(34,197,94,0.1);
+    --red:#ef4444;--red-bg:rgba(239,68,68,0.1);
+    --amber:#f59e0b;--amber-bg:rgba(245,158,11,0.1);
+    --purple:#a78bfa;--purple-bg:rgba(167,139,250,0.1);
+    --font:'DM Sans',sans-serif;--mono:'DM Mono',monospace;
+    --radius:10px;--radius-lg:16px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
 
   /* LOGIN */
-  .login-wrap {
-    display: flex; align-items: center; justify-content: center;
-    min-height: 100vh; padding: 20px;
-  }
-  .login-box {
-    background: var(--bg2); border: 1px solid var(--border2);
-    border-radius: var(--radius-lg); padding: 40px 36px;
-    width: 100%; max-width: 400px;
-  }
-  .login-logo { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
-  .login-sub { font-size: 13px; color: var(--text3); font-family: var(--mono); margin-bottom: 32px; }
-  .login-label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: .6px; font-family: var(--mono); display: block; margin-bottom: 6px; }
-  .login-input {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border2);
-    border-radius: 8px; padding: 11px 14px; font-size: 14px;
-    color: var(--text); font-family: var(--font); margin-bottom: 16px;
-    transition: border-color .15s;
-  }
-  .login-input:focus { outline: none; border-color: var(--accent); }
-  .login-btn {
-    width: 100%; padding: 12px; background: var(--accent); border: none;
-    border-radius: 8px; color: #fff; font-size: 14px; font-weight: 500;
-    font-family: var(--font); cursor: pointer; transition: background .15s;
-    margin-top: 4px;
-  }
-  .login-btn:hover { background: var(--accent2); }
-  .login-btn:disabled { opacity: .6; cursor: not-allowed; }
-  .login-error {
-    background: var(--red-bg); border: 1px solid rgba(239,68,68,0.25);
-    border-radius: 8px; padding: 10px 14px; font-size: 13px;
-    color: var(--red); margin-bottom: 16px; display: none;
-  }
+  .login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:20px}
+  .login-box{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:40px 36px;width:100%;max-width:400px}
+  .login-logo{font-size:20px;font-weight:600;margin-bottom:4px}
+  .login-sub{font-size:13px;color:var(--text3);font-family:var(--mono);margin-bottom:32px}
+  .login-label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);display:block;margin-bottom:6px}
+  .login-input{width:100%;background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;font-size:14px;color:var(--text);font-family:var(--font);margin-bottom:16px;transition:border-color .15s}
+  .login-input:focus{outline:none;border-color:var(--accent)}
+  .login-btn{width:100%;padding:12px;background:var(--accent);border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:500;font-family:var(--font);cursor:pointer;transition:background .15s}
+  .login-btn:hover{background:var(--accent2)}
+  .login-btn:disabled{opacity:.6;cursor:not-allowed}
+  .login-error{background:var(--red-bg);border:1px solid rgba(239,68,68,0.25);border-radius:8px;padding:10px 14px;font-size:13px;color:var(--red);margin-bottom:16px;display:none}
 
   /* APP */
-  .app { display: none; }
-  .sidebar {
-    width: 220px; flex-shrink: 0; background: var(--bg2);
-    border-right: 1px solid var(--border); display: flex;
-    flex-direction: column; position: fixed;
-    top: 0; left: 0; height: 100vh; z-index: 10;
-  }
-  .logo { padding: 24px 20px 20px; border-bottom: 1px solid var(--border); }
-  .logo-title { font-size: 15px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
-  .logo-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
-  .nav { padding: 12px 10px; flex: 1; }
-  .nav-item {
-    display: flex; align-items: center; gap: 10px;
-    padding: 9px 12px; border-radius: 8px;
-    font-size: 13px; color: var(--text2); cursor: pointer;
-    transition: all .15s; margin-bottom: 2px; user-select: none;
-  }
-  .nav-item:hover { background: var(--bg3); color: var(--text); }
-  .nav-item.active { background: rgba(59,130,246,0.12); color: var(--accent); font-weight: 500; }
-  .nav-item svg { width: 16px; height: 16px; flex-shrink: 0; }
-  .nav-section { font-size: 10px; color: var(--text3); padding: 14px 12px 6px; text-transform: uppercase; letter-spacing: 1px; font-family: var(--mono); }
-  .sidebar-footer { padding: 16px 20px; border-top: 1px solid var(--border); }
-  .sidebar-badge { font-size: 11px; color: var(--text3); font-family: var(--mono); }
-  .user-info { font-size: 12px; color: var(--text2); margin-bottom: 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .logout-btn {
-    display: flex; align-items: center; gap: 6px;
-    font-size: 12px; color: var(--text3); cursor: pointer;
-    padding: 6px 0; transition: color .15s; background: none; border: none;
-    font-family: var(--font);
-  }
-  .logout-btn:hover { color: var(--red); }
+  .app-layout{display:flex;min-height:100vh}
+  .sidebar{width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;height:100vh;z-index:10}
+  .logo{padding:24px 20px 20px;border-bottom:1px solid var(--border)}
+  .logo-title{font-size:15px;font-weight:600;letter-spacing:-0.3px}
+  .logo-sub{font-size:11px;color:var(--text3);margin-top:2px;font-family:var(--mono)}
+  .nav{padding:12px 10px;flex:1;overflow-y:auto}
+  .nav-section{font-size:10px;color:var(--text3);padding:14px 12px 6px;text-transform:uppercase;letter-spacing:1px;font-family:var(--mono)}
+  .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;margin-bottom:2px;user-select:none}
+  .nav-item:hover{background:var(--bg3);color:var(--text)}
+  .nav-item.active{background:rgba(59,130,246,0.12);color:var(--accent);font-weight:500}
+  .nav-item svg{width:16px;height:16px;flex-shrink:0}
+  .sidebar-footer{padding:16px 20px;border-top:1px solid var(--border)}
+  .user-info{font-size:12px;color:var(--text2);margin-bottom:8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .logout-btn{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3);cursor:pointer;padding:6px 0;transition:color .15s;background:none;border:none;font-family:var(--font)}
+  .logout-btn:hover{color:var(--red)}
 
-  .main { margin-left: 220px; flex: 1; padding: 28px 32px; min-height: 100vh; }
-  .page { display: none; }
-  .page.active { display: block; }
-  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 28px; }
-  .topbar-title { font-size: 22px; font-weight: 600; letter-spacing: -0.5px; }
-  .topbar-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
-  .topbar-actions { display: flex; gap: 8px; }
+  .main{margin-left:220px;flex:1;padding:28px 32px;min-height:100vh}
+  .page{display:none}
+  .page.active{display:block}
+  .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px}
+  .topbar-title{font-size:22px;font-weight:600;letter-spacing:-0.5px}
+  .topbar-sub{font-size:13px;color:var(--text2);margin-top:2px}
+  .topbar-actions{display:flex;gap:8px;flex-wrap:wrap}
 
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 8px 16px; border-radius: 8px; font-size: 13px;
-    font-family: var(--font); cursor: pointer; transition: all .15s;
-    border: 1px solid var(--border2); background: var(--bg3);
-    color: var(--text); font-weight: 500;
-  }
-  .btn:hover { background: var(--bg4); }
-  .btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
-  .btn.primary:hover { background: var(--accent2); border-color: var(--accent2); }
-  .btn.sm { padding: 5px 10px; font-size: 12px; }
-  .btn svg { width: 14px; height: 14px; }
+  .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:13px;font-family:var(--font);cursor:pointer;transition:all .15s;border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-weight:500}
+  .btn:hover{background:var(--bg4)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent2);border-color:var(--accent2)}
+  .btn.sm{padding:5px 10px;font-size:12px}
+  .btn.danger{background:var(--red-bg);border-color:rgba(239,68,68,0.25);color:var(--red)}
+  .btn.danger:hover{background:rgba(239,68,68,0.2)}
+  .btn svg{width:14px;height:14px}
 
-  .metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 24px; }
-  .metric { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; }
-  .metric-label { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .8px; font-family: var(--mono); margin-bottom: 10px; }
-  .metric-val { font-size: 24px; font-weight: 600; letter-spacing: -1px; }
-  .metric-sub { font-size: 12px; margin-top: 6px; color: var(--text2); }
-  .metric-sub.up { color: var(--red); }
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px}
+  .metric{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px}
+  .metric-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;font-family:var(--mono);margin-bottom:10px}
+  .metric-val{font-size:24px;font-weight:600;letter-spacing:-1px}
+  .metric-sub{font-size:12px;margin-top:6px;color:var(--text2)}
+  .metric-sub.up{color:var(--red)}
+  .metric-sub.down{color:var(--green)}
 
-  .card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px; }
-  .card-title { font-size: 13px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: .6px; font-family: var(--mono); margin-bottom: 16px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px; }
+  .card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-lg);padding:20px;margin-bottom:20px}
+  .card-title{font-size:13px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);margin-bottom:16px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;margin-bottom:20px}
 
-  .alerts-wrap { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-  .alert-pill { display: flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-  .alert-pill.red { background: var(--red-bg); color: var(--red); border: 1px solid rgba(239,68,68,0.2); }
-  .alert-pill.amber { background: var(--amber-bg); color: var(--amber); border: 1px solid rgba(245,158,11,0.2); }
-  .alert-pill.green { background: var(--green-bg); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
+  .alerts-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+  .alert-pill{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:500}
+  .alert-pill.red{background:var(--red-bg);color:var(--red);border:1px solid rgba(239,68,68,0.2)}
+  .alert-pill.amber{background:var(--amber-bg);color:var(--amber);border:1px solid rgba(245,158,11,0.2)}
+  .alert-pill.green{background:var(--green-bg);color:var(--green);border:1px solid rgba(34,197,94,0.2)}
 
-  .table-wrap { overflow-x: auto; }
-  table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  thead th { text-align: left; padding: 10px 14px; color: var(--text3); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: .6px; font-family: var(--mono); border-bottom: 1px solid var(--border); white-space: nowrap; }
-  tbody td { padding: 11px 14px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
-  tbody tr:last-child td { border-bottom: none; }
-  tbody tr:hover td { background: rgba(255,255,255,0.02); }
+  .table-wrap{overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  thead th{text-align:left;padding:10px 14px;color:var(--text3);font-weight:500;font-size:11px;text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono);border-bottom:1px solid var(--border);white-space:nowrap}
+  tbody td{padding:11px 14px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
+  tbody tr:last-child td{border-bottom:none}
+  tbody tr:hover td{background:rgba(255,255,255,0.02)}
 
-  .badge { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 500; white-space: nowrap; }
-  .badge.vencido { background: var(--red-bg); color: var(--red); }
-  .badge.pendiente { background: var(--amber-bg); color: var(--amber); }
-  .badge.pagado { background: var(--green-bg); color: var(--green); }
-  .badge.fijo { background: rgba(59,130,246,0.1); color: var(--accent); }
-  .badge.variable { background: rgba(139,92,246,0.1); color: #a78bfa; }
-  .badge.alta { color: var(--red); }
-  .badge.media { color: var(--amber); }
-  .badge.baja { color: var(--green); }
+  .badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:500;white-space:nowrap}
+  .badge.vencido{background:var(--red-bg);color:var(--red)}
+  .badge.pendiente{background:var(--amber-bg);color:var(--amber)}
+  .badge.pagado{background:var(--green-bg);color:var(--green)}
+  .badge.fijo{background:rgba(59,130,246,0.1);color:var(--accent)}
+  .badge.variable{background:rgba(139,92,246,0.1);color:#a78bfa}
+  .badge.alta{color:var(--red)}
+  .badge.media{color:var(--amber)}
+  .badge.baja{color:var(--green)}
+  .badge.modificado{background:var(--amber-bg);color:var(--amber)}
 
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--bg2); border: 1px solid var(--border2); border-radius: var(--radius-lg); padding: 24px; width: 540px; max-width: 95vw; max-height: 88vh; overflow-y: auto; }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-  .modal-title { font-size: 16px; font-weight: 600; }
-  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .form-group { display: flex; flex-direction: column; gap: 6px; }
-  .form-group.full { grid-column: 1 / -1; }
-  label { font-size: 11px; color: var(--text2); text-transform: uppercase; letter-spacing: .6px; font-family: var(--mono); }
-  input, select, textarea { background: var(--bg3); border: 1px solid var(--border2); border-radius: 8px; padding: 9px 12px; font-size: 13px; color: var(--text); font-family: var(--font); transition: border-color .15s; width: 100%; }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
-  textarea { resize: vertical; min-height: 60px; }
-  select option { background: var(--bg3); }
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);z-index:100;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+  .modal-overlay.open{display:flex}
+  .modal{background:var(--bg2);border:1px solid var(--border2);border-radius:var(--radius-lg);padding:24px;width:540px;max-width:95vw;max-height:88vh;overflow-y:auto}
+  .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}
+  .modal-title{font-size:16px;font-weight:600}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .form-group{display:flex;flex-direction:column;gap:6px}
+  .form-group.full{grid-column:1/-1}
+  label{font-size:11px;color:var(--text2);text-transform:uppercase;letter-spacing:.6px;font-family:var(--mono)}
+  input,select,textarea{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:9px 12px;font-size:13px;color:var(--text);font-family:var(--font);transition:border-color .15s;width:100%}
+  input:focus,select:focus,textarea:focus{outline:none;border-color:var(--accent)}
+  textarea{resize:vertical;min-height:60px}
+  select option{background:var(--bg3)}
 
-  .bar-wrap { margin-bottom: 10px; }
-  .bar-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text2); margin-bottom: 5px; }
-  .bar-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 3px; transition: width .4s ease; }
-  .stat-row { display: flex; justify-content: space-between; align-items: center; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
-  .stat-row:last-child { border-bottom: none; }
+  .bar-wrap{margin-bottom:10px}
+  .bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--text2);margin-bottom:5px}
+  .bar-track{height:6px;background:var(--bg3);border-radius:3px;overflow:hidden}
+  .bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
+  .stat-row{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px}
+  .stat-row:last-child{border-bottom:none}
 
-  @media (max-width: 768px) {
-    .sidebar { width: 60px; }
-    .nav-item span, .logo-title, .logo-sub, .nav-section, .user-info, .logout-btn span { display: none; }
-    .main { margin-left: 60px; padding: 16px; }
-    .grid2 { grid-template-columns: 1fr; }
-    .form-grid { grid-template-columns: 1fr; }
-    .metrics { grid-template-columns: 1fr 1fr; }
+  .hist-item{padding:12px;background:var(--bg3);border-radius:8px;margin-bottom:8px;font-size:12px}
+  .hist-item-header{display:flex;justify-content:space-between;margin-bottom:4px;font-weight:500}
+  .hist-item-detail{color:var(--text2);line-height:1.6}
+
+  .divider{height:1px;background:var(--border);margin:16px 0}
+
+  @media(max-width:768px){
+    .sidebar{width:60px}
+    .nav-item span,.logo-title,.logo-sub,.nav-section,.user-info,.logout-btn span{display:none}
+    .main{margin-left:60px;padding:16px}
+    .grid2,.grid3{grid-template-columns:1fr}
+    .form-grid{grid-template-columns:1fr}
+    .metrics{grid-template-columns:1fr 1fr}
   }
 </style>
 </head>
 <body>
 
 <!-- LOGIN -->
-<div class="login-wrap" id="login-wrap">
+<div id="login-wrap" class="login-wrap">
   <div class="login-box">
     <div class="login-logo">ControlGastos</div>
     <div class="login-sub">panel financiero · acceso privado</div>
@@ -193,11 +162,11 @@
 </div>
 
 <!-- APP -->
-<div class="app" id="app-wrap" style="display:none">
+<div id="app-wrap" class="app-layout" style="display:none">
   <aside class="sidebar">
     <div class="logo">
       <div class="logo-title">ControlGastos</div>
-      <div class="logo-sub">panel financiero</div>
+      <div class="logo-sub">v2.0 · financiero</div>
     </div>
     <nav class="nav">
       <div class="nav-section">Principal</div>
@@ -205,17 +174,27 @@
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
         <span>Dashboard</span>
       </div>
+      <div class="nav-section">Ventas</div>
+      <div class="nav-item" onclick="showPage('ventas',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        <span>Carga de ventas</span>
+      </div>
+      <div class="nav-item" onclick="showPage('cajas',this)">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-8"/></svg>
+        <span>Cajas</span>
+      </div>
+      <div class="nav-section">Gastos</div>
       <div class="nav-item" onclick="showPage('vencimientos',this)">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>
         <span>Vencimientos</span>
       </div>
       <div class="nav-item" onclick="showPage('gastos',this)">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><path d="M9 12h6M9 16h4"/></svg>
-        <span>Gastos</span>
+        <span>Todos los gastos</span>
       </div>
       <div class="nav-section">Análisis</div>
       <div class="nav-item" onclick="showPage('estadisticas',this)">
-        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 3v18h18"/><path d="M7 16l4-4 4 4 4-8"/></svg>
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
         <span>Estadísticas</span>
       </div>
       <div class="nav-section">Sistema</div>
@@ -243,29 +222,88 @@
           <div class="topbar-sub" id="dash-fecha">Cargando...</div>
         </div>
         <div class="topbar-actions">
-          <button class="btn primary" onclick="openModal()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            Nuevo gasto
-          </button>
+          <button class="btn primary" onclick="showPage('ventas',document.querySelector('[onclick*=ventas]'))">+ Cargar venta</button>
+          <button class="btn" onclick="showPage('vencimientos',document.querySelectorAll('.nav-item')[4])">+ Nuevo gasto</button>
         </div>
       </div>
       <div class="metrics" id="metrics-dash"></div>
       <div class="alerts-wrap" id="alerts-dash"></div>
       <div class="grid2">
         <div class="card">
+          <div class="card-title">Ventas — últimos 7 días</div>
+          <div style="position:relative;height:160px"><canvas id="chart-ventas-dash"></canvas></div>
+        </div>
+        <div class="card">
           <div class="card-title">Próximos vencimientos</div>
           <div id="proximos-dash"></div>
         </div>
+      </div>
+      <div class="grid2">
         <div class="card">
-          <div class="card-title">Por categoría</div>
+          <div class="card-title">Resultado del mes</div>
+          <div id="resultado-mes"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Gastos por categoría</div>
           <div id="cat-dash"></div>
         </div>
       </div>
-      <div class="card">
-        <div class="card-title">Evolución mensual</div>
-        <div style="position:relative;height:200px">
-          <canvas id="evo-chart" role="img" aria-label="Evolución de gastos mensuales"></canvas>
+    </div>
+
+    <!-- VENTAS -->
+    <div class="page" id="page-ventas">
+      <div class="topbar">
+        <div>
+          <div class="topbar-title">Carga de ventas</div>
+          <div class="topbar-sub">Registro diario — no se pueden eliminar registros</div>
         </div>
+        <div class="topbar-actions">
+          <button class="btn primary" onclick="openModalVenta()">+ Nueva venta</button>
+        </div>
+      </div>
+      <div class="metrics" id="metrics-ventas"></div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="table-wrap">
+          <table>
+            <thead><tr>
+              <th>Fecha</th><th>Monto</th><th>Vs ayer</th><th>Observaciones</th>
+              <th>Usuario</th><th>Hora carga</th><th>Estado</th><th>Acción</th>
+            </tr></thead>
+            <tbody id="ventas-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- CAJAS -->
+    <div class="page" id="page-cajas">
+      <div class="topbar">
+        <div>
+          <div class="topbar-title">Cajas</div>
+          <div class="topbar-sub">Resumen diario · semanal · mensual automático</div>
+        </div>
+        <div class="topbar-actions">
+          <select id="caja-mes" onchange="renderCajas()" style="width:auto;padding:8px 12px">
+            <option value="0">Mes actual</option>
+            <option value="1">Mes anterior</option>
+            <option value="2">Hace 2 meses</option>
+          </select>
+        </div>
+      </div>
+      <div class="metrics" id="metrics-cajas"></div>
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">Comparativo semanal</div>
+          <div id="comp-semanal"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">Comparativo mensual</div>
+          <div id="comp-mensual"></div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">Ventas diarias del período</div>
+        <div style="position:relative;height:200px"><canvas id="chart-cajas"></canvas></div>
       </div>
     </div>
 
@@ -281,12 +319,9 @@
             <option value="">Todos</option><option>Pendiente</option><option>Pagado</option><option>Vencido</option>
           </select>
           <select id="fv-tipo" onchange="renderVenc()" style="width:auto;padding:8px 12px">
-            <option value="">Fijo / Variable</option><option>Fijo</option><option>Variable</option>
+            <option value="">Fijo/Variable</option><option>Fijo</option><option>Variable</option>
           </select>
-          <button class="btn primary" onclick="openModal()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            Nuevo
-          </button>
+          <button class="btn primary" onclick="openModalGasto()">+ Nuevo gasto</button>
         </div>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
@@ -295,7 +330,7 @@
             <thead><tr>
               <th>Descripción</th><th>Categoría</th><th>Tipo</th>
               <th>Monto</th><th>Vencimiento</th><th>Estado</th>
-              <th>Prioridad</th><th>Acción</th>
+              <th>Prioridad</th><th>Acciones</th>
             </tr></thead>
             <tbody id="venc-body"></tbody>
           </table>
@@ -311,10 +346,7 @@
           <div class="topbar-sub">Historial completo</div>
         </div>
         <div class="topbar-actions">
-          <button class="btn primary" onclick="openModal()">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-            Nuevo gasto
-          </button>
+          <button class="btn primary" onclick="openModalGasto()">+ Nuevo gasto</button>
         </div>
       </div>
       <div class="card" style="padding:0;overflow:hidden">
@@ -323,7 +355,7 @@
             <thead><tr>
               <th>Descripción</th><th>Categoría</th><th>Tipo</th>
               <th>Monto</th><th>Vencimiento</th><th>Estado</th>
-              <th>Recurrente</th><th>Observaciones</th>
+              <th>Recurrente</th><th>Observaciones</th><th>Acciones</th>
             </tr></thead>
             <tbody id="gastos-body"></tbody>
           </table>
@@ -336,7 +368,7 @@
       <div class="topbar">
         <div>
           <div class="topbar-title">Estadísticas</div>
-          <div class="topbar-sub">Análisis financiero del período</div>
+          <div class="topbar-sub">Análisis financiero integral</div>
         </div>
       </div>
       <div class="metrics" id="metrics-stats"></div>
@@ -350,93 +382,149 @@
           <div id="dist-cat"></div>
         </div>
       </div>
+      <div class="card">
+        <div class="card-title">Evolución mensual — Ventas vs Gastos</div>
+        <div style="position:relative;height:220px"><canvas id="chart-evolucion"></canvas></div>
+      </div>
     </div>
 
     <!-- CONFIG -->
     <div class="page" id="page-config">
       <div class="topbar">
-        <div>
-          <div class="topbar-title">Configuración</div>
-          <div class="topbar-sub">Preferencias del sistema</div>
-        </div>
+        <div><div class="topbar-title">Configuración</div><div class="topbar-sub">Preferencias del sistema</div></div>
       </div>
       <div class="card" style="max-width:520px">
-        <div class="card-title">Cambiar contraseña</div>
-        <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Para cambiar tu contraseña, usá la opción en Supabase → Authentication → Users.</p>
-        <div class="card-title" style="margin-top:16px">Alertas de vencimiento</div>
-        <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text)"><input type="checkbox" checked> Avisar 1 día antes</label>
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text)"><input type="checkbox" checked> Avisar 3 días antes</label>
-          <label style="display:flex;align-items:center;gap:10px;font-size:13px;cursor:pointer;text-transform:none;letter-spacing:0;color:var(--text)"><input type="checkbox" checked> Avisar 7 días antes</label>
-        </div>
-        <div class="card-title" style="margin-top:20px">Aumento anormal</div>
-        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
-          <input type="number" value="20" style="width:80px"> <span style="font-size:13px;color:var(--text2)">% respecto al promedio</span>
-        </div>
+        <div class="card-title">Conexión Supabase</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:var(--mono);font-size:12px;color:var(--green)">● Conectado a Supabase</div>
+        <div class="divider"></div>
+        <div class="card-title">SQL — tabla ventas</div>
+        <div style="background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:14px;font-family:var(--mono);font-size:11px;color:var(--text2);white-space:pre-wrap;line-height:1.8">create table ventas (
+  id uuid default gen_random_uuid() primary key,
+  fecha date not null,
+  monto numeric not null default 0,
+  observaciones text,
+  usuario text,
+  hora_carga timestamptz default now(),
+  modificado boolean default false,
+  created_at timestamptz default now()
+);
+create table ventas_historial (
+  id uuid default gen_random_uuid() primary key,
+  venta_id uuid references ventas(id),
+  valor_anterior numeric,
+  valor_nuevo numeric,
+  motivo text,
+  usuario text,
+  fecha_modificacion timestamptz default now()
+);
+alter table ventas enable row level security;
+create policy "public access" on ventas for all using (true);
+alter table ventas_historial enable row level security;
+create policy "public access" on ventas_historial for all using (true);</div>
+        <button class="btn" style="margin-top:12px" onclick="copiarSQL()">Copiar SQL</button>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- MODAL NUEVO GASTO -->
-<div class="modal-overlay" id="modal-overlay">
+<!-- MODAL VENTA -->
+<div class="modal-overlay" id="modal-venta">
   <div class="modal">
     <div class="modal-header">
-      <span class="modal-title">Nuevo gasto</span>
-      <button class="btn sm" onclick="closeModal()">✕ Cerrar</button>
+      <span class="modal-title" id="modal-venta-title">Nueva venta</span>
+      <button class="btn sm" onclick="closeModalVenta()">✕</button>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Fecha</label>
+        <input type="date" id="fv-fecha">
+      </div>
+      <div class="form-group">
+        <label>Monto total ($)</label>
+        <input type="number" id="fv-monto" placeholder="0">
+      </div>
+      <div class="form-group full">
+        <label>Observaciones</label>
+        <textarea id="fv-obs" placeholder="Notas opcionales..."></textarea>
+      </div>
+      <div class="form-group full" id="motivo-wrap" style="display:none">
+        <label>Motivo de modificación <span style="color:var(--red)">*</span></label>
+        <input type="text" id="fv-motivo" placeholder="Ej: Error de carga, ajuste de caja...">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+      <button class="btn" onclick="closeModalVenta()">Cancelar</button>
+      <button class="btn primary" onclick="guardarVenta()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL HISTORIAL VENTA -->
+<div class="modal-overlay" id="modal-historial">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title">Historial de modificaciones</span>
+      <button class="btn sm" onclick="closeModalHistorial()">✕</button>
+    </div>
+    <div id="historial-content"></div>
+  </div>
+</div>
+
+<!-- MODAL GASTO -->
+<div class="modal-overlay" id="modal-gasto">
+  <div class="modal">
+    <div class="modal-header">
+      <span class="modal-title" id="modal-gasto-title">Nuevo gasto</span>
+      <button class="btn sm" onclick="closeModalGasto()">✕</button>
     </div>
     <div class="form-grid">
       <div class="form-group full">
         <label>Descripción</label>
-        <input type="text" id="f-desc" placeholder="Ej: EPEC Mayo, Monotributo...">
+        <input type="text" id="fg-desc" placeholder="Ej: EPEC Mayo, Monotributo...">
       </div>
       <div class="form-group">
         <label>Categoría</label>
-        <select id="f-cat">
+        <select id="fg-cat">
           <option>Impuesto</option><option>Servicio</option><option>Sueldo</option>
           <option>Proveedor</option><option>Deuda</option><option>Otro</option>
         </select>
       </div>
       <div class="form-group">
         <label>Tipo</label>
-        <select id="f-tipo"><option>Fijo</option><option>Variable</option></select>
+        <select id="fg-tipo"><option>Fijo</option><option>Variable</option></select>
       </div>
       <div class="form-group">
         <label>Monto ($)</label>
-        <input type="number" id="f-monto" placeholder="0">
+        <input type="number" id="fg-monto" placeholder="0">
       </div>
       <div class="form-group">
         <label>Fecha vencimiento</label>
-        <input type="date" id="f-fecha">
+        <input type="date" id="fg-fecha">
       </div>
       <div class="form-group">
         <label>Estado</label>
-        <select id="f-estado">
-          <option>Pendiente</option><option>Pagado</option><option>Vencido</option>
-        </select>
+        <select id="fg-estado"><option>Pendiente</option><option>Pagado</option><option>Vencido</option></select>
       </div>
       <div class="form-group">
         <label>Prioridad</label>
-        <select id="f-prioridad"><option>Alta</option><option>Media</option><option>Baja</option></select>
+        <select id="fg-prioridad"><option>Alta</option><option>Media</option><option>Baja</option></select>
       </div>
       <div class="form-group">
         <label>Medio de pago</label>
-        <select id="f-medio">
-          <option>Transferencia</option><option>Efectivo</option><option>Débito automático</option>
-        </select>
+        <select id="fg-medio"><option>Transferencia</option><option>Efectivo</option><option>Débito automático</option></select>
       </div>
       <div class="form-group">
         <label>Recurrente</label>
-        <select id="f-recurrente"><option>No</option><option>Sí</option></select>
+        <select id="fg-recurrente"><option>No</option><option>Sí</option></select>
       </div>
       <div class="form-group full">
         <label>Observaciones</label>
-        <textarea id="f-obs" placeholder="Notas opcionales..."></textarea>
+        <textarea id="fg-obs" placeholder="Notas opcionales..."></textarea>
       </div>
     </div>
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
-      <button class="btn" onclick="closeModal()">Cancelar</button>
+      <button class="btn" onclick="closeModalGasto()">Cancelar</button>
       <button class="btn primary" onclick="guardarGasto()">Guardar gasto</button>
     </div>
   </div>
@@ -444,7 +532,7 @@
 
 <script>
 // ═══════════════════════════════════════════
-//  CONFIGURACIÓN — editá estas dos líneas
+//  CONFIGURACIÓN
 // ═══════════════════════════════════════════
 const SUPABASE_URL = 'https://iaegnlrvhcrdijconwhz.supabase.co'
 const SUPABASE_KEY = 'sb_publishable_ogOnwtzUhh6xUges78HOyg_LPJKFFwU'
@@ -452,9 +540,11 @@ const SUPABASE_KEY = 'sb_publishable_ogOnwtzUhh6xUges78HOyg_LPJKFFwU'
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY)
 const fmt = n => '$' + Math.round(n).toLocaleString('es-AR')
+const fmtPct = n => (n >= 0 ? '+' : '') + n.toFixed(1) + '%'
 const today = new Date()
 const todayStr = today.toISOString().slice(0,10)
-let gastos = []
+let gastos = [], ventas = [], currentUser = null
+let editandoGastoId = null, editandoVentaId = null
 
 // ── AUTH ──────────────────────────────────
 async function doLogin() {
@@ -463,14 +553,12 @@ async function doLogin() {
   const btn = document.getElementById('login-btn')
   const errEl = document.getElementById('login-error')
   errEl.style.display = 'none'
-  btn.disabled = true
-  btn.textContent = 'Ingresando...'
+  btn.disabled = true; btn.textContent = 'Ingresando...'
   const { data, error } = await db.auth.signInWithPassword({ email, password: pass })
   if (error) {
     errEl.textContent = 'Email o contraseña incorrectos'
     errEl.style.display = 'block'
-    btn.disabled = false
-    btn.textContent = 'Ingresar'
+    btn.disabled = false; btn.textContent = 'Ingresar'
     return
   }
   mostrarApp(data.user)
@@ -481,51 +569,40 @@ async function doLogout() {
   document.getElementById('app-wrap').style.display = 'none'
   document.getElementById('login-wrap').style.display = 'flex'
   document.getElementById('login-pass').value = ''
+  currentUser = null
 }
 
-function mostrarApp(user) {
+async function mostrarApp(user) {
+  currentUser = user
   document.getElementById('login-wrap').style.display = 'none'
   document.getElementById('app-wrap').style.display = 'flex'
   document.getElementById('user-email-display').textContent = user.email
-  cargarYRenderizar()
-}
-
-// Enter en el login
-document.getElementById('login-pass').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin()
-})
-document.getElementById('login-email').addEventListener('keydown', e => {
-  if (e.key === 'Enter') document.getElementById('login-pass').focus()
-})
-
-// Verificar sesión existente al cargar
-async function checkSession() {
-  const { data } = await db.auth.getSession()
-  if (data.session) {
-    mostrarApp(data.session.user)
-  }
-}
-
-// ── DATOS ─────────────────────────────────
-async function cargarYRenderizar() {
-  const { data, error } = await db.from('gastos').select('*').order('fecha_vencimiento', { ascending: true })
-  if (!error && data) gastos = data
+  await cargarTodo()
   renderDashboard()
 }
 
-function diasHasta(f) {
-  return Math.ceil((new Date(f) - today) / (1000*60*60*24))
+document.getElementById('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin() })
+document.getElementById('login-email').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pass').focus() })
+
+// ── DATOS ─────────────────────────────────
+async function cargarTodo() {
+  const [rg, rv] = await Promise.all([
+    db.from('gastos').select('*').order('fecha_vencimiento', {ascending:true}),
+    db.from('ventas').select('*').order('fecha', {ascending:false})
+  ])
+  if (!rg.error && rg.data) gastos = rg.data
+  if (!rv.error && rv.data) ventas = rv.data
 }
+
+function diasHasta(f) { return Math.ceil((new Date(f) - today) / (1000*60*60*24)) }
 
 function showPage(id, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'))
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'))
   document.getElementById('page-' + id).classList.add('active')
-  el.classList.add('active')
-  if (id === 'dashboard') renderDashboard()
-  if (id === 'vencimientos') renderVenc()
-  if (id === 'gastos') renderGastos()
-  if (id === 'estadisticas') renderStats()
+  if (el && el.classList) el.classList.add('active')
+  const renders = {dashboard:renderDashboard,ventas:renderVentas,cajas:renderCajas,vencimientos:renderVenc,gastos:renderGastos,estadisticas:renderStats}
+  if (renders[id]) renders[id]()
 }
 
 function estadoBadge(e) {
@@ -538,79 +615,195 @@ function tipoBadge(t) { return `<span class="badge ${t==='Fijo'?'fijo':'variable
 function renderDashboard() {
   const mes = today.toLocaleString('es-AR', {month:'long', year:'numeric'})
   document.getElementById('dash-fecha').textContent = 'Resumen operativo · ' + mes.charAt(0).toUpperCase() + mes.slice(1)
-  const total = gastos.reduce((a,g) => a + Number(g.monto), 0)
-  const fijos = gastos.filter(g => g.tipo==='Fijo').reduce((a,g) => a + Number(g.monto), 0)
-  const variables = gastos.filter(g => g.tipo==='Variable').reduce((a,g) => a + Number(g.monto), 0)
+
+  const totalGastos = gastos.reduce((a,g) => a + Number(g.monto), 0)
+  const ventasMes = ventas.filter(v => v.fecha && v.fecha.slice(0,7) === todayStr.slice(0,7))
+  const totalVentasMes = ventasMes.reduce((a,v) => a + Number(v.monto), 0)
+  const ganancia = totalVentasMes - totalGastos
+  const ventasHoy = ventas.find(v => v.fecha === todayStr)
   const vencidos = gastos.filter(g => g.estado==='Vencido').length
   const impacto7 = gastos.filter(g => g.estado==='Pendiente' && diasHasta(g.fecha_vencimiento) <= 7 && diasHasta(g.fecha_vencimiento) >= 0).reduce((a,g) => a + Number(g.monto), 0)
 
   document.getElementById('metrics-dash').innerHTML = `
-    <div class="metric"><div class="metric-label">Total del mes</div><div class="metric-val">${fmt(total)}</div><div class="metric-sub up">período actual</div></div>
-    <div class="metric"><div class="metric-label">Gastos fijos</div><div class="metric-val">${fmt(fijos)}</div><div class="metric-sub">${total>0?Math.round(fijos/total*100):0}% del total</div></div>
-    <div class="metric"><div class="metric-label">Gastos variables</div><div class="metric-val">${fmt(variables)}</div><div class="metric-sub">${total>0?Math.round(variables/total*100):0}% del total</div></div>
-    <div class="metric"><div class="metric-label">Vencidos</div><div class="metric-val" style="color:var(--red)">${vencidos}</div><div class="metric-sub up">${vencidos>0?'requieren atención':'al día'}</div></div>
-    <div class="metric"><div class="metric-label">Impacto próx. 7 días</div><div class="metric-val">${fmt(impacto7)}</div><div class="metric-sub up">en caja</div></div>
+    <div class="metric"><div class="metric-label">Ventas del mes</div><div class="metric-val" style="color:var(--green)">${fmt(totalVentasMes)}</div></div>
+    <div class="metric"><div class="metric-label">Gastos del mes</div><div class="metric-val" style="color:var(--red)">${fmt(totalGastos)}</div></div>
+    <div class="metric"><div class="metric-label">Resultado</div><div class="metric-val" style="color:${ganancia>=0?'var(--green)':'var(--red)'}">${fmt(ganancia)}</div><div class="metric-sub ${ganancia>=0?'down':'up'}">${ganancia>=0?'ganancia':'pérdida'}</div></div>
+    <div class="metric"><div class="metric-label">Venta de hoy</div><div class="metric-val">${ventasHoy?fmt(ventasHoy.monto):'—'}</div></div>
+    <div class="metric"><div class="metric-label">Vencidos</div><div class="metric-val" style="color:var(--red)">${vencidos}</div><div class="metric-sub ${vencidos>0?'up':''}">gastos</div></div>
+    <div class="metric"><div class="metric-label">Caja próx. 7 días</div><div class="metric-val">${fmt(impacto7)}</div><div class="metric-sub up">por pagar</div></div>
   `
 
   const alertas = []
   gastos.forEach(g => {
-    if (g.estado === 'Vencido') alertas.push({t: g.descripcion + ' está vencido', c:'red'})
-    else if (g.estado === 'Pendiente') {
+    if (g.estado==='Vencido') alertas.push({t:g.descripcion+' está vencido',c:'red'})
+    else if (g.estado==='Pendiente') {
       const d = diasHasta(g.fecha_vencimiento)
-      if (d === 0) alertas.push({t: g.descripcion + ' vence hoy', c:'red'})
-      else if (d <= 3 && d > 0) alertas.push({t: g.descripcion + ' vence en ' + d + ' días', c:'amber'})
-      else if (d <= 7 && d > 0) alertas.push({t: g.descripcion + ' vence en ' + d + ' días', c:'amber'})
+      if (d===0) alertas.push({t:g.descripcion+' vence hoy',c:'red'})
+      else if (d<=3&&d>0) alertas.push({t:g.descripcion+' vence en '+d+' días',c:'amber'})
     }
   })
-  if (alertas.length === 0) alertas.push({t:'Sin alertas activas', c:'green'})
-  document.getElementById('alerts-dash').innerHTML = alertas.slice(0,6).map(a =>
-    `<div class="alert-pill ${a.c}">● ${a.t}</div>`
-  ).join('')
+  if (!ventasHoy) alertas.push({t:'Todavía no cargaste la venta de hoy',c:'amber'})
+  if (alertas.length===0) alertas.push({t:'Todo al día ✓',c:'green'})
+  document.getElementById('alerts-dash').innerHTML = alertas.slice(0,5).map(a =>
+    `<div class="alert-pill ${a.c}">● ${a.t}</div>`).join('')
 
-  const pendSort = gastos.filter(g => g.estado !== 'Pagado').sort((a,b) => new Date(a.fecha_vencimiento) - new Date(b.fecha_vencimiento)).slice(0,5)
+  // Chart ventas 7 días
+  const ultimos7 = []
+  for (let i=6;i>=0;i--) {
+    const d = new Date(today); d.setDate(d.getDate()-i)
+    const ds = d.toISOString().slice(0,7+3)
+    const vd = ventas.find(v => v.fecha === ds)
+    ultimos7.push({label: d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric'}), val: vd ? Number(vd.monto) : 0})
+  }
+  const ctxVD = document.getElementById('chart-ventas-dash')
+  if (ctxVD) {
+    if (window._chartVD) window._chartVD.destroy()
+    window._chartVD = new Chart(ctxVD.getContext('2d'), {
+      type:'bar',
+      data:{labels:ultimos7.map(x=>x.label),datasets:[{data:ultimos7.map(x=>x.val),backgroundColor:'rgba(34,197,94,0.5)',borderColor:'#22c55e',borderWidth:1,borderRadius:4}]},
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:'#555f7a',callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555f7a'},grid:{display:false}}}}
+    })
+  }
+
+  // Próximos vencimientos
+  const pendSort = gastos.filter(g => g.estado!=='Pagado').sort((a,b) => new Date(a.fecha_vencimiento)-new Date(b.fecha_vencimiento)).slice(0,4)
   document.getElementById('proximos-dash').innerHTML = pendSort.length ? pendSort.map(g => {
     const d = diasHasta(g.fecha_vencimiento)
-    const col = g.estado==='Vencido' ? 'var(--red)' : d <= 3 ? 'var(--amber)' : 'var(--text2)'
-    const label = g.estado==='Vencido' ? 'Vencido' : d === 0 ? 'Hoy' : 'En ' + d + ' días'
-    return `<div class="stat-row"><span>${g.descripcion}</span><span style="color:${col};font-size:12px">${label}</span><span style="font-weight:500">${fmt(g.monto)}</span></div>`
-  }).join('') : '<div style="padding:20px;text-align:center;color:var(--text3);font-size:13px">Todo al día ✓</div>'
+    const col = g.estado==='Vencido'?'var(--red)':d<=3?'var(--amber)':'var(--text2)'
+    return `<div class="stat-row"><span>${g.descripcion}</span><span style="color:${col};font-size:12px">${g.estado==='Vencido'?'Vencido':d===0?'Hoy':'En '+d+' días'}</span><span style="font-weight:500">${fmt(g.monto)}</span></div>`
+  }).join('') : '<div style="padding:16px;text-align:center;color:var(--text3);font-size:13px">Sin vencimientos pendientes ✓</div>'
 
-  if (total > 0) {
+  // Resultado del mes
+  document.getElementById('resultado-mes').innerHTML = `
+    <div class="stat-row"><span style="color:var(--green)">● Ingresos</span><span style="font-weight:600;color:var(--green)">${fmt(totalVentasMes)}</span></div>
+    <div class="stat-row"><span style="color:var(--red)">● Gastos</span><span style="font-weight:600;color:var(--red)">${fmt(totalGastos)}</span></div>
+    <div class="stat-row" style="border-top:1px solid var(--border2);margin-top:4px"><span style="font-weight:600">Resultado</span><span style="font-weight:700;font-size:16px;color:${ganancia>=0?'var(--green)':'var(--red)'}">${fmt(ganancia)}</span></div>
+  `
+
+  // Gastos por categoría
+  if (totalGastos > 0) {
     const cats = {}
-    gastos.forEach(g => { cats[g.categoria] = (cats[g.categoria]||0) + Number(g.monto) })
-    const catSort = Object.entries(cats).sort((a,b) => b[1]-a[1])
+    gastos.forEach(g => { cats[g.categoria]=(cats[g.categoria]||0)+Number(g.monto) })
     const barColors = ['#3b82f6','#22c55e','#f59e0b','#a78bfa','#ef4444']
-    document.getElementById('cat-dash').innerHTML = catSort.map(([c,v],i) => {
-      const pct = Math.round(v/total*100)
+    document.getElementById('cat-dash').innerHTML = Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,v],i) => {
+      const pct = Math.round(v/totalGastos*100)
       return `<div class="bar-wrap"><div class="bar-label"><span>${c}</span><span>${pct}% · ${fmt(v)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${barColors[i%barColors.length]}"></div></div></div>`
     }).join('')
   }
+}
 
-  if (!window._evoChart) {
-    const ctx = document.getElementById('evo-chart').getContext('2d')
-    window._evoChart = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: ['Ene','Feb','Mar','Abr','May','Jun'],
-        datasets: [{
-          label: 'Gastos', data: [0,0,0,0,total,0],
-          borderColor: '#3b82f6', backgroundColor: 'rgba(59,130,246,0.08)',
-          fill: true, tension: 0.35, pointRadius: 5,
-          pointBackgroundColor: '#3b82f6', pointBorderColor: '#0f1117', pointBorderWidth: 2
-        }]
+// ── VENTAS ────────────────────────────────
+function renderVentas() {
+  const ventasMes = ventas.filter(v => v.fecha && v.fecha.slice(0,7)===todayStr.slice(0,7))
+  const totalMes = ventasMes.reduce((a,v)=>a+Number(v.monto),0)
+  const promDia = ventasMes.length > 0 ? totalMes/ventasMes.length : 0
+  const ventasHoy = ventas.find(v=>v.fecha===todayStr)
+  const sem = getVentasSemana(0)
+  const semAnt = getVentasSemana(1)
+  const varSem = semAnt > 0 ? ((sem-semAnt)/semAnt)*100 : 0
+
+  document.getElementById('metrics-ventas').innerHTML = `
+    <div class="metric"><div class="metric-label">Venta de hoy</div><div class="metric-val" style="color:var(--green)">${ventasHoy?fmt(ventasHoy.monto):'Sin cargar'}</div></div>
+    <div class="metric"><div class="metric-label">Caja del mes</div><div class="metric-val">${fmt(totalMes)}</div></div>
+    <div class="metric"><div class="metric-label">Promedio diario</div><div class="metric-val">${fmt(promDia)}</div></div>
+    <div class="metric"><div class="metric-label">Semana actual</div><div class="metric-val">${fmt(sem)}</div><div class="metric-sub ${varSem>=0?'down':'up'}">${fmtPct(varSem)} vs sem. ant.</div></div>
+  `
+
+  document.getElementById('ventas-body').innerHTML = ventas.length ? ventas.map(v => {
+    const idx = ventas.indexOf(v)
+    const vAyer = ventas[idx+1]
+    let vsAyer = '—'
+    if (vAyer) {
+      const pct = ((Number(v.monto)-Number(vAyer.monto))/Number(vAyer.monto))*100
+      vsAyer = `<span style="color:${pct>=0?'var(--green)':'var(--red)'}">${fmtPct(pct)}</span>`
+    }
+    const hora = v.hora_carga ? new Date(v.hora_carga).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}) : '—'
+    return `<tr>
+      <td style="font-family:var(--mono)">${v.fecha}</td>
+      <td style="font-weight:600;font-family:var(--mono)">${fmt(v.monto)}</td>
+      <td>${vsAyer}</td>
+      <td style="color:var(--text2);font-size:12px">${v.observaciones||'—'}</td>
+      <td style="color:var(--text2);font-size:12px">${v.usuario||'—'}</td>
+      <td style="color:var(--text3);font-size:12px;font-family:var(--mono)">${hora}</td>
+      <td>${v.modificado?'<span class="badge modificado">Modificado</span>':'<span class="badge pagado">Original</span>'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn sm" onclick="editarVenta('${v.id}')">✏ Editar</button>
+        <button class="btn sm" onclick="verHistorial('${v.id}')">📋 Historial</button>
+      </td>
+    </tr>`
+  }).join('') : '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">Sin ventas cargadas</td></tr>'
+}
+
+function getVentasSemana(offset) {
+  const lunes = new Date(today)
+  lunes.setDate(today.getDate() - today.getDay() + 1 - offset*7)
+  const domingo = new Date(lunes); domingo.setDate(lunes.getDate()+6)
+  return ventas.filter(v => {
+    const f = new Date(v.fecha)
+    return f >= lunes && f <= domingo
+  }).reduce((a,v)=>a+Number(v.monto),0)
+}
+
+// ── CAJAS ─────────────────────────────────
+function renderCajas() {
+  const offset = parseInt(document.getElementById('caja-mes').value)
+  const refDate = new Date(today)
+  refDate.setMonth(refDate.getMonth()-offset)
+  const mesStr = refDate.toISOString().slice(0,7)
+  const mesAntStr = new Date(refDate.getFullYear(), refDate.getMonth()-1, 1).toISOString().slice(0,7)
+  const mes2AntStr = new Date(refDate.getFullYear(), refDate.getMonth()-2, 1).toISOString().slice(0,7)
+
+  const vMes = ventas.filter(v=>v.fecha&&v.fecha.slice(0,7)===mesStr)
+  const vMesAnt = ventas.filter(v=>v.fecha&&v.fecha.slice(0,7)===mesAntStr)
+  const vMes2Ant = ventas.filter(v=>v.fecha&&v.fecha.slice(0,7)===mes2AntStr)
+  const totalMes = vMes.reduce((a,v)=>a+Number(v.monto),0)
+  const totalMesAnt = vMesAnt.reduce((a,v)=>a+Number(v.monto),0)
+  const totalMes2Ant = vMes2Ant.reduce((a,v)=>a+Number(v.monto),0)
+  const varMes = totalMesAnt>0?((totalMes-totalMesAnt)/totalMesAnt)*100:0
+  const promDia = vMes.length>0?totalMes/vMes.length:0
+  const semActual = getVentasSemana(0)
+  const semAnt = getVentasSemana(1)
+  const varSem = semAnt>0?((semActual-semAnt)/semAnt)*100:0
+
+  document.getElementById('metrics-cajas').innerHTML = `
+    <div class="metric"><div class="metric-label">Caja del mes</div><div class="metric-val" style="color:var(--green)">${fmt(totalMes)}</div><div class="metric-sub ${varMes>=0?'down':'up'}">${fmtPct(varMes)} vs mes ant.</div></div>
+    <div class="metric"><div class="metric-label">Semana actual</div><div class="metric-val">${fmt(semActual)}</div><div class="metric-sub ${varSem>=0?'down':'up'}">${fmtPct(varSem)} vs sem. ant.</div></div>
+    <div class="metric"><div class="metric-label">Promedio diario</div><div class="metric-val">${fmt(promDia)}</div></div>
+    <div class="metric"><div class="metric-label">Días cargados</div><div class="metric-val">${vMes.length}</div></div>
+  `
+
+  document.getElementById('comp-semanal').innerHTML = `
+    <div class="stat-row"><span>Semana actual</span><span style="font-weight:600;color:var(--green)">${fmt(semActual)}</span></div>
+    <div class="stat-row"><span>Semana anterior</span><span style="font-weight:500">${fmt(semAnt)}</span></div>
+    <div class="stat-row"><span>Variación</span><span style="font-weight:700;color:${varSem>=0?'var(--green)':'var(--red)'}">${fmtPct(varSem)}</span></div>
+  `
+
+  const mesLabel = refDate.toLocaleString('es-AR',{month:'long'})
+  const mesAntLabel = new Date(refDate.getFullYear(),refDate.getMonth()-1,1).toLocaleString('es-AR',{month:'long'})
+  const mes2AntLabel = new Date(refDate.getFullYear(),refDate.getMonth()-2,1).toLocaleString('es-AR',{month:'long'})
+  const varMes2 = totalMes2Ant>0?((totalMes-totalMes2Ant)/totalMes2Ant)*100:0
+
+  document.getElementById('comp-mensual').innerHTML = `
+    <div class="stat-row"><span style="text-transform:capitalize">${mesLabel}</span><span style="font-weight:600;color:var(--green)">${fmt(totalMes)}</span></div>
+    <div class="stat-row"><span style="text-transform:capitalize">${mesAntLabel}</span><span style="font-weight:500">${fmt(totalMesAnt)}</span></div>
+    <div class="stat-row"><span style="text-transform:capitalize">${mes2AntLabel}</span><span style="font-weight:500">${fmt(totalMes2Ant)}</span></div>
+    <div class="stat-row"><span>Var. vs mes ant.</span><span style="font-weight:700;color:${varMes>=0?'var(--green)':'var(--red)'}">${fmtPct(varMes)}</span></div>
+    <div class="stat-row"><span>Var. vs hace 2 meses</span><span style="font-weight:700;color:${varMes2>=0?'var(--green)':'var(--red)'}">${fmtPct(varMes2)}</span></div>
+  `
+
+  // Chart ventas del mes
+  const diasMes = vMes.sort((a,b)=>new Date(a.fecha)-new Date(b.fecha))
+  const ctxC = document.getElementById('chart-cajas')
+  if (ctxC) {
+    if (window._chartCajas) window._chartCajas.destroy()
+    window._chartCajas = new Chart(ctxC.getContext('2d'), {
+      type:'bar',
+      data:{
+        labels:diasMes.map(v=>v.fecha.slice(8)),
+        datasets:[{label:'Ventas',data:diasMes.map(v=>Number(v.monto)),backgroundColor:'rgba(34,197,94,0.4)',borderColor:'#22c55e',borderWidth:1,borderRadius:4}]
       },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: { ticks: { color:'#555f7a', callback: v => '$' + Math.round(v/1000) + 'k' }, grid: { color:'rgba(255,255,255,0.04)' } },
-          x: { ticks: { color:'#555f7a' }, grid: { display: false } }
-        }
-      }
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{ticks:{color:'#555f7a',callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555f7a'},grid:{display:false}}}}
     })
-  } else {
-    window._evoChart.data.datasets[0].data[4] = total
-    window._evoChart.update()
   }
 }
 
@@ -618,11 +811,11 @@ function renderDashboard() {
 function renderVenc() {
   const fE = document.getElementById('fv-estado').value
   const fT = document.getElementById('fv-tipo').value
-  let rows = gastos.filter(g => (!fE || g.estado===fE) && (!fT || g.tipo===fT))
-  rows.sort((a,b) => new Date(a.fecha_vencimiento) - new Date(b.fecha_vencimiento))
+  let rows = gastos.filter(g=>(!fE||g.estado===fE)&&(!fT||g.tipo===fT))
+  rows.sort((a,b)=>new Date(a.fecha_vencimiento)-new Date(b.fecha_vencimiento))
   document.getElementById('venc-body').innerHTML = rows.length ? rows.map(g => {
     const d = diasHasta(g.fecha_vencimiento)
-    const fechaColor = g.estado==='Vencido' ? 'color:var(--red)' : d<=3 ? 'color:var(--amber)' : ''
+    const fechaColor = g.estado==='Vencido'?'color:var(--red)':d<=3?'color:var(--amber)':''
     return `<tr>
       <td style="font-weight:500">${g.descripcion}</td>
       <td style="color:var(--text2)">${g.categoria}</td>
@@ -632,10 +825,10 @@ function renderVenc() {
       <td>${estadoBadge(g.estado)}</td>
       <td><span class="badge ${(g.prioridad||'').toLowerCase()}">${g.prioridad}</span></td>
       <td style="display:flex;gap:6px">
-  <button class="btn sm" onclick="marcarPagado('${g.id}')">✓ Pagar</button>
-  <button class="btn sm" onclick="editarGasto('${g.id}')">✏ Editar</button>
-  <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕</button>
-</td>
+        <button class="btn sm" onclick="marcarPagado('${g.id}')">✓ Pagar</button>
+        <button class="btn sm" onclick="editarGasto('${g.id}')">✏</button>
+        <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕</button>
+      </td>
     </tr>`
   }).join('') : '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">Sin resultados</td></tr>'
 }
@@ -654,116 +847,259 @@ function renderGastos() {
       <td style="color:var(--text3);font-size:12px">${g.observaciones||'—'}</td>
       <td style="display:flex;gap:6px">
         <button class="btn sm" onclick="editarGasto('${g.id}')">✏ Editar</button>
-        <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕ Eliminar</button>
+        <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕</button>
       </td>
     </tr>`).join('')
 }
 
 // ── ESTADÍSTICAS ──────────────────────────
 function renderStats() {
-  const total = gastos.reduce((a,g) => a + Number(g.monto), 0)
-  const pagado = gastos.filter(g => g.estado==='Pagado').reduce((a,g) => a + Number(g.monto), 0)
-  const pendiente = total - pagado
+  const totalGastos = gastos.reduce((a,g)=>a+Number(g.monto),0)
+  const totalVentasMes = ventas.filter(v=>v.fecha&&v.fecha.slice(0,7)===todayStr.slice(0,7)).reduce((a,v)=>a+Number(v.monto),0)
+  const pagado = gastos.filter(g=>g.estado==='Pagado').reduce((a,g)=>a+Number(g.monto),0)
+  const pendiente = totalGastos-pagado
+  const ganancia = totalVentasMes-totalGastos
+
   document.getElementById('metrics-stats').innerHTML = `
-    <div class="metric"><div class="metric-label">Total acumulado</div><div class="metric-val">${fmt(total)}</div></div>
-    <div class="metric"><div class="metric-label">Ya pagado</div><div class="metric-val" style="color:var(--green)">${fmt(pagado)}</div></div>
+    <div class="metric"><div class="metric-label">Ventas del mes</div><div class="metric-val" style="color:var(--green)">${fmt(totalVentasMes)}</div></div>
+    <div class="metric"><div class="metric-label">Gastos totales</div><div class="metric-val" style="color:var(--red)">${fmt(totalGastos)}</div></div>
+    <div class="metric"><div class="metric-label">Resultado</div><div class="metric-val" style="color:${ganancia>=0?'var(--green)':'var(--red)'}">${fmt(ganancia)}</div></div>
+    <div class="metric"><div class="metric-label">Gastos pagados</div><div class="metric-val" style="color:var(--green)">${fmt(pagado)}</div></div>
     <div class="metric"><div class="metric-label">Por pagar</div><div class="metric-val" style="color:var(--amber)">${fmt(pendiente)}</div></div>
-    <div class="metric"><div class="metric-label">Proyección cierre</div><div class="metric-val">${fmt(total*1.07)}</div></div>
   `
-  if (gastos.length === 0) return
-  const top5 = [...gastos].sort((a,b) => Number(b.monto)-Number(a.monto)).slice(0,5)
-  const maxM = Number(top5[0]?.monto || 1)
-  document.getElementById('top-gastos').innerHTML = top5.map(g => {
-    const pct = Math.round(Number(g.monto)/maxM*100)
-    return `<div class="bar-wrap"><div class="bar-label"><span>${g.descripcion}</span><span>${fmt(g.monto)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:#3b82f6"></div></div></div>`
-  }).join('')
-  const cats = {}
-  gastos.forEach(g => { cats[g.categoria] = (cats[g.categoria]||0) + Number(g.monto) })
-  const barColors = ['#3b82f6','#22c55e','#f59e0b','#a78bfa','#ef4444']
-  document.getElementById('dist-cat').innerHTML = Object.entries(cats).sort((a,b) => b[1]-a[1]).map(([c,v],i) => {
-    const pct = Math.round(v/total*100)
-    return `<div class="stat-row"><span>${c}</span><span style="color:${barColors[i%barColors.length]};font-weight:500">${pct}% · ${fmt(v)}</span></div>`
-  }).join('')
+
+  if (gastos.length>0) {
+    const top5 = [...gastos].sort((a,b)=>Number(b.monto)-Number(a.monto)).slice(0,5)
+    const maxM = Number(top5[0]?.monto||1)
+    document.getElementById('top-gastos').innerHTML = top5.map(g => {
+      const pct = Math.round(Number(g.monto)/maxM*100)
+      return `<div class="bar-wrap"><div class="bar-label"><span>${g.descripcion}</span><span>${fmt(g.monto)}</span></div><div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:#3b82f6"></div></div></div>`
+    }).join('')
+
+    const cats = {}
+    gastos.forEach(g=>{cats[g.categoria]=(cats[g.categoria]||0)+Number(g.monto)})
+    const barColors = ['#3b82f6','#22c55e','#f59e0b','#a78bfa','#ef4444']
+    document.getElementById('dist-cat').innerHTML = Object.entries(cats).sort((a,b)=>b[1]-a[1]).map(([c,v],i)=>{
+      const pct = Math.round(v/totalGastos*100)
+      return `<div class="stat-row"><span>${c}</span><span style="color:${barColors[i%barColors.length]};font-weight:500">${pct}% · ${fmt(v)}</span></div>`
+    }).join('')
+  }
+
+  // Chart evolución
+  const meses = []
+  for (let i=4;i>=0;i--) {
+    const d = new Date(today.getFullYear(), today.getMonth()-i, 1)
+    const ms = d.toISOString().slice(0,7)
+    const tv = ventas.filter(v=>v.fecha&&v.fecha.slice(0,7)===ms).reduce((a,v)=>a+Number(v.monto),0)
+    meses.push({label:d.toLocaleString('es-AR',{month:'short'}),ventas:tv,gastos:totalGastos})
+  }
+  const ctxE = document.getElementById('chart-evolucion')
+  if (ctxE) {
+    if (window._chartEvo) window._chartEvo.destroy()
+    window._chartEvo = new Chart(ctxE.getContext('2d'), {
+      type:'line',
+      data:{
+        labels:meses.map(m=>m.label),
+        datasets:[
+          {label:'Ventas',data:meses.map(m=>m.ventas),borderColor:'#22c55e',backgroundColor:'rgba(34,197,94,0.08)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#22c55e'},
+          {label:'Gastos',data:meses.map(m=>m.gastos),borderColor:'#ef4444',backgroundColor:'rgba(239,68,68,0.06)',fill:true,tension:.3,pointRadius:4,pointBackgroundColor:'#ef4444'}
+        ]
+      },
+      options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8b92a8',font:{size:12}}}},scales:{y:{ticks:{color:'#555f7a',callback:v=>'$'+Math.round(v/1000)+'k'},grid:{color:'rgba(255,255,255,0.04)'}},x:{ticks:{color:'#555f7a'},grid:{display:false}}}}
+    })
+  }
 }
 
-// ── GUARDAR GASTO ─────────────────────────
-async function guardarGasto() {
-  const desc = document.getElementById('f-desc').value.trim()
-  const monto = parseFloat(document.getElementById('f-monto').value) || 0
-  if (!desc || !monto) { alert('Completá descripción y monto'); return }
-  const datos = {
-    descripcion: desc,
-    categoria: document.getElementById('f-cat').value,
-    tipo: document.getElementById('f-tipo').value,
-    monto,
-    fecha_vencimiento: document.getElementById('f-fecha').value || todayStr,
-    estado: document.getElementById('f-estado').value,
-    prioridad: document.getElementById('f-prioridad').value,
-    medio_pago: document.getElementById('f-medio').value,
-    recurrente: document.getElementById('f-recurrente').value,
-    observaciones: document.getElementById('f-obs').value
-  }
-  if (editandoId) {
-    await db.from('gastos').update(datos).eq('id', editandoId)
-    const idx = gastos.findIndex(x => x.id == editandoId)
-    if (idx !== -1) gastos[idx] = { ...gastos[idx], ...datos }
-    editandoId = null
-    document.querySelector('.modal-title').textContent = 'Nuevo gasto'
+// ── MODAL VENTA ───────────────────────────
+function openModalVenta() {
+  editandoVentaId = null
+  document.getElementById('modal-venta-title').textContent = 'Nueva venta'
+  document.getElementById('fv-fecha').value = todayStr
+  document.getElementById('fv-monto').value = ''
+  document.getElementById('fv-obs').value = ''
+  document.getElementById('fv-motivo').value = ''
+  document.getElementById('motivo-wrap').style.display = 'none'
+  document.getElementById('modal-venta').classList.add('open')
+}
+
+function editarVenta(id) {
+  const v = ventas.find(x=>x.id===id)
+  if (!v) return
+  editandoVentaId = id
+  document.getElementById('modal-venta-title').textContent = 'Editar venta'
+  document.getElementById('fv-fecha').value = v.fecha
+  document.getElementById('fv-monto').value = v.monto
+  document.getElementById('fv-obs').value = v.observaciones||''
+  document.getElementById('fv-motivo').value = ''
+  document.getElementById('motivo-wrap').style.display = 'block'
+  document.getElementById('modal-venta').classList.add('open')
+}
+
+function closeModalVenta() { document.getElementById('modal-venta').classList.remove('open') }
+
+async function guardarVenta() {
+  const fecha = document.getElementById('fv-fecha').value
+  const monto = parseFloat(document.getElementById('fv-monto').value)||0
+  const obs = document.getElementById('fv-obs').value
+  if (!fecha||!monto) { alert('Completá fecha y monto'); return }
+
+  if (editandoVentaId) {
+    const motivo = document.getElementById('fv-motivo').value.trim()
+    if (!motivo) { alert('Ingresá el motivo de la modificación'); return }
+    const vAnterior = ventas.find(x=>x.id===editandoVentaId)
+    await db.from('ventas_historial').insert([{
+      venta_id: editandoVentaId,
+      valor_anterior: vAnterior.monto,
+      valor_nuevo: monto,
+      motivo,
+      usuario: currentUser?.email||'—'
+    }])
+    await db.from('ventas').update({monto, observaciones:obs, modificado:true}).eq('id',editandoVentaId)
+    const idx = ventas.findIndex(x=>x.id===editandoVentaId)
+    if (idx!==-1) ventas[idx] = {...ventas[idx], monto, observaciones:obs, modificado:true}
+    editandoVentaId = null
   } else {
-    const { data, error } = await db.from('gastos').insert([datos]).select()
-    if (!error && data) gastos.unshift(data[0])
+    const {data,error} = await db.from('ventas').insert([{
+      fecha, monto, observaciones:obs,
+      usuario: currentUser?.email||'—',
+      modificado: false
+    }]).select()
+    if (!error&&data) ventas.unshift(data[0])
   }
-  closeModal()
-  document.getElementById('f-desc').value = ''
-  document.getElementById('f-monto').value = ''
-  document.getElementById('f-obs').value = ''
+  closeModalVenta()
+  renderVentas()
+  renderDashboard()
+}
+
+async function verHistorial(id) {
+  const {data} = await db.from('ventas_historial').select('*').eq('venta_id',id).order('fecha_modificacion',{ascending:false})
+  const venta = ventas.find(x=>x.id===id)
+  document.getElementById('historial-content').innerHTML = data&&data.length ? `
+    <div style="margin-bottom:12px;font-size:13px;color:var(--text2)">Venta del <strong style="color:var(--text)">${venta?.fecha}</strong> — valor actual: <strong style="color:var(--green)">${fmt(venta?.monto)}</strong></div>
+    ${data.map(h=>`
+      <div class="hist-item">
+        <div class="hist-item-header">
+          <span>${new Date(h.fecha_modificacion).toLocaleDateString('es-AR')} ${new Date(h.fecha_modificacion).toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'})}</span>
+          <span style="color:var(--text2)">${h.usuario||'—'}</span>
+        </div>
+        <div class="hist-item-detail">
+          <span style="color:var(--red)">${fmt(h.valor_anterior)}</span> → <span style="color:var(--green)">${fmt(h.valor_nuevo)}</span>
+          <br>Motivo: ${h.motivo||'—'}
+        </div>
+      </div>`).join('')}
+  ` : '<div style="text-align:center;padding:32px;color:var(--text3)">Sin modificaciones registradas</div>'
+  document.getElementById('modal-historial').classList.add('open')
+}
+
+function closeModalHistorial() { document.getElementById('modal-historial').classList.remove('open') }
+
+// ── MODAL GASTO ───────────────────────────
+function openModalGasto() {
+  editandoGastoId = null
+  document.getElementById('modal-gasto-title').textContent = 'Nuevo gasto'
+  document.getElementById('fg-fecha').value = todayStr
+  document.getElementById('fg-desc').value = ''
+  document.getElementById('fg-monto').value = ''
+  document.getElementById('fg-obs').value = ''
+  document.getElementById('modal-gasto').classList.add('open')
+}
+
+function editarGasto(id) {
+  const g = gastos.find(x=>x.id==id)
+  if (!g) return
+  editandoGastoId = id
+  document.getElementById('modal-gasto-title').textContent = 'Editar gasto'
+  document.getElementById('fg-desc').value = g.descripcion
+  document.getElementById('fg-cat').value = g.categoria
+  document.getElementById('fg-tipo').value = g.tipo
+  document.getElementById('fg-monto').value = g.monto
+  document.getElementById('fg-fecha').value = g.fecha_vencimiento
+  document.getElementById('fg-estado').value = g.estado
+  document.getElementById('fg-prioridad').value = g.prioridad
+  document.getElementById('fg-medio').value = g.medio_pago||'Transferencia'
+  document.getElementById('fg-recurrente').value = g.recurrente||'No'
+  document.getElementById('fg-obs').value = g.observaciones||''
+  document.getElementById('modal-gasto').classList.add('open')
+}
+
+function closeModalGasto() { document.getElementById('modal-gasto').classList.remove('open') }
+
+async function guardarGasto() {
+  const desc = document.getElementById('fg-desc').value.trim()
+  const monto = parseFloat(document.getElementById('fg-monto').value)||0
+  if (!desc||!monto) { alert('Completá descripción y monto'); return }
+  const datos = {
+    descripcion:desc, categoria:document.getElementById('fg-cat').value,
+    tipo:document.getElementById('fg-tipo').value, monto,
+    fecha_vencimiento:document.getElementById('fg-fecha').value||todayStr,
+    estado:document.getElementById('fg-estado').value,
+    prioridad:document.getElementById('fg-prioridad').value,
+    medio_pago:document.getElementById('fg-medio').value,
+    recurrente:document.getElementById('fg-recurrente').value,
+    observaciones:document.getElementById('fg-obs').value
+  }
+  if (editandoGastoId) {
+    await db.from('gastos').update(datos).eq('id',editandoGastoId)
+    const idx = gastos.findIndex(x=>x.id==editandoGastoId)
+    if (idx!==-1) gastos[idx] = {...gastos[idx],...datos}
+    editandoGastoId = null
+    document.getElementById('modal-gasto-title').textContent = 'Nuevo gasto'
+  } else {
+    const {data,error} = await db.from('gastos').insert([datos]).select()
+    if (!error&&data) gastos.unshift(data[0])
+  }
+  closeModalGasto()
   renderDashboard()
   renderVenc()
   renderGastos()
 }
 
-// ── MARCAR PAGADO ─────────────────────────
 async function marcarPagado(id) {
-  await db.from('gastos').update({ estado: 'Pagado', fecha_pago: todayStr }).eq('id', id)
-  const g = gastos.find(x => x.id == id)
-  if (g) { g.estado = 'Pagado'; g.fecha_pago = todayStr }
+  await db.from('gastos').update({estado:'Pagado',fecha_pago:todayStr}).eq('id',id)
+  const g = gastos.find(x=>x.id==id)
+  if (g) {g.estado='Pagado';g.fecha_pago=todayStr}
   renderVenc()
-}
-let editandoId = null
-
-function editarGasto(id) {
-  const g = gastos.find(x => x.id == id)
-  if (!g) return
-  editandoId = id
-  document.getElementById('f-desc').value = g.descripcion
-  document.getElementById('f-cat').value = g.categoria
-  document.getElementById('f-tipo').value = g.tipo
-  document.getElementById('f-monto').value = g.monto
-  document.getElementById('f-fecha').value = g.fecha_vencimiento
-  document.getElementById('f-estado').value = g.estado
-  document.getElementById('f-prioridad').value = g.prioridad
-  document.getElementById('f-medio').value = g.medio_pago || 'Transferencia'
-  document.getElementById('f-recurrente').value = g.recurrente || 'No'
-  document.getElementById('f-obs').value = g.observaciones || ''
-  document.querySelector('.modal-title').textContent = 'Editar gasto'
-  document.getElementById('modal-overlay').classList.add('open')
 }
 
 async function eliminarGasto(id) {
-  if (!confirm('¿Eliminár este gasto? Esta acción no se puede deshacer.')) return
-  await db.from('gastos').delete().eq('id', id)
-  gastos = gastos.filter(x => x.id != id)
-  renderVenc()
-  renderGastos()
-  renderDashboard()
+  if (!confirm('¿Eliminar este gasto? Esta acción no se puede deshacer.')) return
+  await db.from('gastos').delete().eq('id',id)
+  gastos = gastos.filter(x=>x.id!=id)
+  renderVenc(); renderGastos(); renderDashboard()
 }
-function openModal() {
-  document.getElementById('f-fecha').value = todayStr
-  document.getElementById('modal-overlay').classList.add('open')
+
+function copiarSQL() {
+  const sql = `create table ventas (
+  id uuid default gen_random_uuid() primary key,
+  fecha date not null,
+  monto numeric not null default 0,
+  observaciones text,
+  usuario text,
+  hora_carga timestamptz default now(),
+  modificado boolean default false,
+  created_at timestamptz default now()
+);
+create table ventas_historial (
+  id uuid default gen_random_uuid() primary key,
+  venta_id uuid references ventas(id),
+  valor_anterior numeric,
+  valor_nuevo numeric,
+  motivo text,
+  usuario text,
+  fecha_modificacion timestamptz default now()
+);
+alter table ventas enable row level security;
+create policy "public access" on ventas for all using (true);
+alter table ventas_historial enable row level security;
+create policy "public access" on ventas_historial for all using (true);`
+  navigator.clipboard.writeText(sql).then(()=>alert('SQL copiado'))
 }
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open') }
 
 // ── INIT ──────────────────────────────────
+async function checkSession() {
+  const {data} = await db.auth.getSession()
+  if (data.session) mostrarApp(data.session.user)
+}
 checkSession()
 </script>
 </body>
