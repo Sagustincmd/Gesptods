@@ -631,7 +631,11 @@ function renderVenc() {
       <td style="${fechaColor};font-family:var(--mono)">${g.fecha_vencimiento}</td>
       <td>${estadoBadge(g.estado)}</td>
       <td><span class="badge ${(g.prioridad||'').toLowerCase()}">${g.prioridad}</span></td>
-      <td><button class="btn sm" onclick="marcarPagado('${g.id}')">✓ Pagar</button></td>
+      <td style="display:flex;gap:6px">
+  <button class="btn sm" onclick="marcarPagado('${g.id}')">✓ Pagar</button>
+  <button class="btn sm" onclick="editarGasto('${g.id}')">✏ Editar</button>
+  <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕</button>
+</td>
     </tr>`
   }).join('') : '<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--text3)">Sin resultados</td></tr>'
 }
@@ -648,6 +652,10 @@ function renderGastos() {
       <td>${estadoBadge(g.estado)}</td>
       <td><span class="badge ${g.recurrente==='Sí'?'fijo':'programado'}">${g.recurrente==='Sí'?'Recurrente':'Una vez'}</span></td>
       <td style="color:var(--text3);font-size:12px">${g.observaciones||'—'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="btn sm" onclick="editarGasto('${g.id}')">✏ Editar</button>
+        <button class="btn sm danger" onclick="eliminarGasto('${g.id}')">✕ Eliminar</button>
+      </td>
     </tr>`).join('')
 }
 
@@ -683,7 +691,7 @@ async function guardarGasto() {
   const desc = document.getElementById('f-desc').value.trim()
   const monto = parseFloat(document.getElementById('f-monto').value) || 0
   if (!desc || !monto) { alert('Completá descripción y monto'); return }
-  const nuevo = {
+  const datos = {
     descripcion: desc,
     categoria: document.getElementById('f-cat').value,
     tipo: document.getElementById('f-tipo').value,
@@ -695,13 +703,23 @@ async function guardarGasto() {
     recurrente: document.getElementById('f-recurrente').value,
     observaciones: document.getElementById('f-obs').value
   }
-  const { data, error } = await db.from('gastos').insert([nuevo]).select()
-  if (!error && data) gastos.unshift(data[0])
+  if (editandoId) {
+    await db.from('gastos').update(datos).eq('id', editandoId)
+    const idx = gastos.findIndex(x => x.id == editandoId)
+    if (idx !== -1) gastos[idx] = { ...gastos[idx], ...datos }
+    editandoId = null
+    document.querySelector('.modal-title').textContent = 'Nuevo gasto'
+  } else {
+    const { data, error } = await db.from('gastos').insert([datos]).select()
+    if (!error && data) gastos.unshift(data[0])
+  }
   closeModal()
   document.getElementById('f-desc').value = ''
   document.getElementById('f-monto').value = ''
   document.getElementById('f-obs').value = ''
   renderDashboard()
+  renderVenc()
+  renderGastos()
 }
 
 // ── MARCAR PAGADO ─────────────────────────
@@ -711,7 +729,34 @@ async function marcarPagado(id) {
   if (g) { g.estado = 'Pagado'; g.fecha_pago = todayStr }
   renderVenc()
 }
+let editandoId = null
 
+function editarGasto(id) {
+  const g = gastos.find(x => x.id == id)
+  if (!g) return
+  editandoId = id
+  document.getElementById('f-desc').value = g.descripcion
+  document.getElementById('f-cat').value = g.categoria
+  document.getElementById('f-tipo').value = g.tipo
+  document.getElementById('f-monto').value = g.monto
+  document.getElementById('f-fecha').value = g.fecha_vencimiento
+  document.getElementById('f-estado').value = g.estado
+  document.getElementById('f-prioridad').value = g.prioridad
+  document.getElementById('f-medio').value = g.medio_pago || 'Transferencia'
+  document.getElementById('f-recurrente').value = g.recurrente || 'No'
+  document.getElementById('f-obs').value = g.observaciones || ''
+  document.querySelector('.modal-title').textContent = 'Editar gasto'
+  document.getElementById('modal-overlay').classList.add('open')
+}
+
+async function eliminarGasto(id) {
+  if (!confirm('¿Eliminár este gasto? Esta acción no se puede deshacer.')) return
+  await db.from('gastos').delete().eq('id', id)
+  gastos = gastos.filter(x => x.id != id)
+  renderVenc()
+  renderGastos()
+  renderDashboard()
+}
 function openModal() {
   document.getElementById('f-fecha').value = todayStr
   document.getElementById('modal-overlay').classList.add('open')
