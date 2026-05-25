@@ -266,7 +266,7 @@
         <div class="table-wrap">
           <table>
             <thead><tr>
-              <th>Fecha</th><th>Monto</th><th>Vs ayer</th><th>Observaciones</th>
+              <th>Fecha</th><th>Monto</th><th>Tipo cobro</th><th>Vs ayer</th><th>Observaciones</th>
               <th>Usuario</th><th>Hora carga</th><th>Estado</th><th>Acción</th>
             </tr></thead>
             <tbody id="ventas-body"></tbody>
@@ -443,6 +443,16 @@ create policy "public access" on ventas_historial for all using (true);</div>
       <div class="form-group">
         <label>Monto total ($)</label>
         <input type="number" id="fv-monto" placeholder="0">
+      </div>
+      <div class="form-group">
+        <label>Tipo de cobro</label>
+        <select id="fv-tipo-pago">
+          <option>Efectivo</option>
+          <option>Crédito</option>
+          <option>Débito</option>
+          <option>Transferencia</option>
+          <option>Sindicato Municipal</option>
+        </select>
       </div>
       <div class="form-group full">
         <label>Observaciones</label>
@@ -722,6 +732,7 @@ function renderVentas() {
       <td style="font-family:var(--mono)">${v.fecha}</td>
       <td style="font-weight:600;font-family:var(--mono)">${fmt(v.monto)}</td>
       <td>${vsAyer}</td>
+      <td><span class="badge fijo">${v.tipo_pago||'Efectivo'}</span></td>
       <td style="color:var(--text2);font-size:12px">${v.observaciones||'—'}</td>
       <td style="color:var(--text2);font-size:12px">${v.usuario||'—'}</td>
       <td style="color:var(--text3);font-size:12px;font-family:var(--mono)">${hora}</td>
@@ -954,13 +965,15 @@ async function guardarVenta() {
       motivo,
       usuario: currentUser?.email||'—'
     }])
-    await db.from('ventas').update({monto, observaciones:obs, modificado:true}).eq('id',editandoVentaId)
+    const tipo_pago = document.getElementById('fv-tipo-pago').value
+      await db.from('ventas').update({monto, observaciones:obs, tipo_pago, modificado:true}).eq('id',editandoVentaId)
     const idx = ventas.findIndex(x=>x.id===editandoVentaId)
     if (idx!==-1) ventas[idx] = {...ventas[idx], monto, observaciones:obs, modificado:true}
     editandoVentaId = null
   } else {
+    const tipo_pago = document.getElementById('fv-tipo-pago').value
     const {data,error} = await db.from('ventas').insert([{
-      fecha, monto, observaciones:obs,
+      fecha, monto, observaciones:obs, tipo_pago,
       usuario: currentUser?.email||'—',
       modificado: false
     }]).select()
