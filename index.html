@@ -663,8 +663,8 @@ function renderDashboard() {
     const d = new Date(today); d.setDate(d.getDate()-i)
     const ds = d.toISOString().slice(0,7+3)
     const vd = ventas.find(v => v.fecha === ds)
-    const vd = ventas.filter(x => v.fecha === ds).reduce((a,x) => a + Number(x.monto), 0)
-    ultimos7.push({label: d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric'}), val: vd})
+    const totalDia = ventas.filter(x => x.fecha === ds).reduce((a,x) => a + Number(x.monto), 0)
+    ultimos7.push({label: d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric'}), val: totalDia})
   }
   const ctxVD = document.getElementById('chart-ventas-dash')
   if (ctxVD) {
