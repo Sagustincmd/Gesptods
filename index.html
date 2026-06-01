@@ -630,7 +630,7 @@ function renderDashboard() {
   const ventasMes = ventas.filter(v => v.fecha && v.fecha.slice(0,7) === todayStr.slice(0,7))
   const totalVentasMes = ventasMes.reduce((a,v) => a + Number(v.monto), 0)
   const ganancia = totalVentasMes - totalGastos
-  const ventasHoy = ventas.find(v => v.fecha === todayStr)
+  const ventasHoy = ventas.filter(v => v.fecha === todayStr).reduce((a,v) => a + Number(v.monto), 0)
   const vencidos = gastos.filter(g => g.estado==='Vencido').length
   const impacto7 = gastos.filter(g => g.estado==='Pendiente' && diasHasta(g.fecha_vencimiento) <= 7 && diasHasta(g.fecha_vencimiento) >= 0).reduce((a,g) => a + Number(g.monto), 0)
 
@@ -638,7 +638,7 @@ function renderDashboard() {
     <div class="metric"><div class="metric-label">Ventas del mes</div><div class="metric-val" style="color:var(--green)">${fmt(totalVentasMes)}</div></div>
     <div class="metric"><div class="metric-label">Gastos del mes</div><div class="metric-val" style="color:var(--red)">${fmt(totalGastos)}</div></div>
     <div class="metric"><div class="metric-label">Resultado</div><div class="metric-val" style="color:${ganancia>=0?'var(--green)':'var(--red)'}">${fmt(ganancia)}</div><div class="metric-sub ${ganancia>=0?'down':'up'}">${ganancia>=0?'ganancia':'pérdida'}</div></div>
-    <div class="metric"><div class="metric-label">Venta de hoy</div><div class="metric-val">${ventasHoy?fmt(ventasHoy.monto):'—'}</div></div>
+    <div class="metric"><div class="metric-label">Venta de hoy</div><div class="metric-val">${ventasHoy>0?fmt(ventasHoy):'Sin cargar'}</div></div>
     <div class="metric"><div class="metric-label">Vencidos</div><div class="metric-val" style="color:var(--red)">${vencidos}</div><div class="metric-sub ${vencidos>0?'up':''}">gastos</div></div>
     <div class="metric"><div class="metric-label">Caja próx. 7 días</div><div class="metric-val">${fmt(impacto7)}</div><div class="metric-sub up">por pagar</div></div>
   `
@@ -663,7 +663,8 @@ function renderDashboard() {
     const d = new Date(today); d.setDate(d.getDate()-i)
     const ds = d.toISOString().slice(0,7+3)
     const vd = ventas.find(v => v.fecha === ds)
-    ultimos7.push({label: d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric'}), val: vd ? Number(vd.monto) : 0})
+    const vd = ventas.filter(v => v.fecha === ds).reduce((a,v) => a + Number(v.monto), 0)
+    ultimos7.push({label: d.toLocaleDateString('es-AR',{weekday:'short',day:'numeric'}), val: vd})
   }
   const ctxVD = document.getElementById('chart-ventas-dash')
   if (ctxVD) {
