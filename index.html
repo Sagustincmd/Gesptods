@@ -652,7 +652,7 @@ function renderDashboard() {
       else if (d<=3&&d>0) alertas.push({t:g.descripcion+' vence en '+d+' días',c:'amber'})
     }
   })
-  if (!ventasHoy) alertas.push({t:'Todavía no cargaste la venta de hoy',c:'amber'})
+  if (ventasHoy === 0) alertas.push({t:'Todavía no cargaste la venta de hoy',c:'amber'})
   if (alertas.length===0) alertas.push({t:'Todo al día ✓',c:'green'})
   document.getElementById('alerts-dash').innerHTML = alertas.slice(0,5).map(a =>
     `<div class="alert-pill ${a.c}">● ${a.t}</div>`).join('')
